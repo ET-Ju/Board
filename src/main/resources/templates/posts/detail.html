@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div sec:authorize="isAuthenticated()">
+    <span th:if="${post.authorUsername == #authentication.name}">
+        <a th:href="@{/posts/{id}/edit(id=${post.id})}">수정</a>
+        <form th:action="@{/posts/{id}/delete(id=${post.id})}" method="post">
+            <button type="submit">삭제</button>
+        </form>
+    </span>
+</div>
+<h1 th:text="${post.title}">제목</h1>
+<p th:text="${post.authorNickname}">작성자</p>
+<p th:text="${post.content}">내용</p>
+
+<h3>댓글</h3>
+<div th:each="comment : ${post.comments}">
+    <span th:text="${comment.authorUsername}">작성자</span>
+    <span th:text="${comment.content}">내용</span>
+
+    <span sec:authorize="isAuthenticated()">[로그인됨]</span>
+    <span>DTO username=[<span th:text="${comment.authorUsername}"></span>]</span>
+    <span>로그인 name=[<span sec:authentication="name"></span>]</span>
+
+    <div sec:authorize="isAuthenticated()"
+          th:if="${comment.authorUsername == #authentication.name}">
+        <form th:action="@{/comments/{id}/delete(id=${comment.id})}" method="post">
+            <input type="hidden" name="postId" th:value="${post.id}">
+            <button type="submit">삭제</button>
+        </form>
+    </div>
+</div>
+
+<form th:action="@{/posts/{id}/comments(id=${post.id})}" method="post">
+    <input type="text" name="content" placeholder="댓글">
+    <button type="submit">등록</button>
+</form>
+</body>
+</html>

@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: board
+  datasource:
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+  profiles:
+    active: dev

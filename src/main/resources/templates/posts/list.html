@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <span sec:authorize="isAuthenticated()">
+        <span sec:authentication="name">아이디</span>님 환영합니다.
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <button type="submit">로그아웃</button>
+        </form>
+    </span>
+    <span sec:authorize="!isAuthenticated()">
+        <a th:href="@{/login}">로그인</a>
+        <a th:href="@{/signup}">회원가입</a>
+    </span>
+</div>
+    <a href="/posts/new">글쓰기</a>
+    <h1>게시글 목록</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>댓글</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="post : ${posts}">
+                <td th:text="${post.id}">1</td>
+                <td>
+                    <a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">제목</a>
+                </td>
+                <td th:text="${post.author}">작성자</td>
+                <td th:text="${post.commentCount}">0</td>
+            </tr>
+        </tbody>
+    </table>
+    <form th:action="@{/posts}" method="get">
+        <input type="text" name="keyword" th:value="${keyword}" placeholder="제목 검색">
+        <button type="submit">검색</button>
+    </form>
+<div>
+    <a th:if="${posts.hasPrevious()}"
+       th:href="@{/posts(page=${posts.number - 1})}">이전</a>
+    <span th:each="i : ${#numbers.sequence(0, posts.totalPages - 1)}">
+        <a th:href="@{/posts(page=${i}, keyword=${keyword})}"
+           th:text="${i + 1}"
+           th:style="${i == posts.number} ? 'font-weight:bold' : ''">1</a>
+    </span>
+    <a th:if="${posts.hasNext()}"
+       th:href="@{/posts(page=${posts.number + 1})}">다음</a>
+</div>
+</body>
+</html>
