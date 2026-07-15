@@ -1,3 +1,7 @@
+**데모**: https://board-web-service.onrender.com/posts
+
+> 첫 접속 시 서버가 깨어나는 데 30초~1분 정도 걸립니다.
+
 # 게시판 (Board)
 
 Spring Boot 기반 게시판 애플리케이션. 회원 인증/인가, 댓글, 다중 단어 검색·페이징을 제공하며,
